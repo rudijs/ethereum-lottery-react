@@ -47,45 +47,60 @@ class App extends Component {
 
     await lottery.methods.pickWinner().send({
       from: accounts[0]
-    })
+    });
 
     this.setState({ message: "A winner has been picked!" });
-    
-
-  }
+  };
 
   render() {
+    let message;
+    if (this.state.message) {
+      message = (
+        <div class="alert alert-info">
+          <strong>Info</strong> {this.state.message}
+        </div>
+      );
+    } else {
+      message = "";
+    }
+
     return (
-      <div>
-        <h2>Lottery Contract</h2>
-        <p> This contract is managed by: {this.state.manager}.</p>
-        <p>
-          Currently there are {this.state.players.length} people entered,
-          competing to win {web3.utils.fromWei(this.state.balance, "ether")}{" "}
-          ether.
-        </p>
-        <hr />
-        <form onSubmit={this.onSubmit}>
+      <React.Fragment>
+        <nav className="navbar navbar-dark bg-dark mb-5">
+          <span className="navbar-brand mb-0 h1 mx-auto">Lottery Contract</span>
+        </nav>
+        <div className="container">
+          <p> This contract is managed by: {this.state.manager}.</p>
+          <p>
+            Currently there are {this.state.players.length} people entered,
+            competing to win {web3.utils.fromWei(this.state.balance, "ether")}{" "}
+            ether.
+          </p>
+          <hr />
           <h4>Want to try your luck?</h4>
-          <div>
-            <label>Amount of Ether to enter:</label>
+          <form onSubmit={this.onSubmit} className="form-inline">
+            <label for="ether">Amount of Ether to enter:</label>
             <input
+              className="form-control mx-2"
+              id="ether"
               value={this.state.value}
               onChange={event => this.setState({ value: event.target.value })}
             />
-          </div>
-          <button>Enter</button>
-        </form>
+            <button className="btn btn-primary">Enter</button>
+          </form>
 
-        <hr />
+          <hr />
 
-        <h4>Ready to pick a winner?</h4>
-        <button onClick={this.onClick}>Pick a winner!</button>
+          <h4>Ready to pick a winner?</h4>
+          <button onClick={this.onClick} className="btn btn-success">
+            Pick a winner!
+          </button>
 
-        <hr />
+          <hr />
 
-        <h1>{this.state.message}</h1>
-      </div>
+          {message}
+        </div>
+      </React.Fragment>
     );
   }
 }
